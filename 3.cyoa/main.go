@@ -1,29 +1,25 @@
-package cyoa
+package main
 
 import (
-	handler "cyoa/template"
-	"io/ioutil"
+	"fmt"
 	"net/http"
-	"text/template"
+
+	"cyoa/jsonparser"
+
+	"cyoa/template"
 )
 
 func main() {
 
-    contents, err := ioutil.ReadFile();
-    if err!= nil{
-        panic(err)
-    }
+	storyMap := jsonparser.Unmarshal("./jsonparser/gopher.json")
 
-    template.New("story").Parse()
-    
-    http.HandleFunc("intro",handler.IntroHandler)
-    http.HandleFunc("new-york",)
-    http.HandleFunc("debate",)
-    http.HandleFunc("sean-kelly",)
-    http.HandleFunc("mark-bates",)
-    http.HandleFunc("denver",)
-    http.HandleFunc("home",)
-	http.ListenAndServe(":8080", nil)
+	for k, v := range storyMap {
+        h := template.AdventureHandler(v)
+        http.HandleFunc("/"+k, h)
+	}
+
+    err := http.ListenAndServe(":8881", nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }
-
-

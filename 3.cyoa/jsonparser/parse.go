@@ -12,7 +12,7 @@ type Story struct {
 	Story   []string
 	Options []struct {
 		Text string
-		Rrc  string
+		Arc  string
 	}
 }
 
